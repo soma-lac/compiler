@@ -1,0 +1,77 @@
+options {
+  JDK_VERSION = "1.5";
+  STATIC = false;
+  UNICODE_INPUT = true;
+}
+
+PARSER_BEGIN(Calc)
+
+import java.io.*;
+public class Calc
+{
+    public static void main(String args [])
+    {
+        try {
+            if (args.length == 0)
+                new Calc(System.in).interactive();    // 対話モードへ
+            else {
+                Reader reader = new BufferedReader(new FileReader(new File(args[0])));
+                Calc calc = new Calc(reader);
+                calc.eval();
+            }
+        } catch (ParseException e) {
+            System.err.println(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void interactive() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            System.out.print("> ");
+            String input = "";
+            while (true) { 
+                String line = reader.readLine();
+                if (line == null) return;
+                input += line;
+                if (line.length() == 0 || input.charAt(input.length() - 1) != '\\') 
+                    break;
+                input = input.substring(0, input.length() - 1);
+	    }
+            try {
+                ReInit(new StringReader(input));
+                eval();
+            } catch (ParseException e) {
+                System.err.println(e);
+            }
+        }
+    }	
+}
+
+PARSER_END(Calc)
+
+SKIP : { < [" ", "\r", "\t", "\n"] > }
+
+TOKEN : {
+  < INTEGER: (["0"-"9"])+ >
+}
+
+void eval() :
+{
+    int n;
+}
+{
+    n = expr() { System.out.println("=>" + n); } <EOF>
+}
+
+int expr() :
+{
+    Token x, y;
+}
+{
+    x = <INTEGER> "+" y = <INTEGER>
+    {
+        return Integer.parseInt(x.image) + Integer.parseInt(y.image);
+    }
+}
