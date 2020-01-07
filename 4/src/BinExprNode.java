@@ -21,6 +21,8 @@ public class BinExprNode extends Node {
 			return left.eval(env) * right.eval(env);
 		case "/":
 			return left.eval(env) / right.eval(env);
+		case "%":
+			return left.eval(env) % right.eval(env);
 		case "<":
 			return left.eval(env) < right.eval(env) ? 1 : 0;
 		case ">":
