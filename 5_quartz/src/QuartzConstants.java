@@ -9,25 +9,25 @@ public interface QuartzConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int IF = 2;
+  int IF = 3;
   /** RegularExpression Id. */
-  int THEN = 3;
+  int THEN = 4;
   /** RegularExpression Id. */
-  int ELSE = 4;
+  int ELSE = 5;
   /** RegularExpression Id. */
-  int WHILE = 5;
+  int WHILE = 6;
   /** RegularExpression Id. */
-  int DO = 6;
+  int DO = 7;
   /** RegularExpression Id. */
-  int END = 7;
+  int END = 8;
   /** RegularExpression Id. */
-  int PUTS = 8;
+  int PUTS = 9;
   /** RegularExpression Id. */
-  int INTEGER = 9;
+  int INTEGER = 10;
   /** RegularExpression Id. */
-  int STRING = 10;
+  int STRING = 11;
   /** RegularExpression Id. */
-  int IDENTIFIER = 11;
+  int IDENTIFIER = 12;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -36,6 +36,7 @@ public interface QuartzConstants {
   String[] tokenImage = {
     "<EOF>",
     "<token of kind 1>",
+    "<token of kind 2>",
     "\"if\"",
     "\"then\"",
     "\"else\"",
