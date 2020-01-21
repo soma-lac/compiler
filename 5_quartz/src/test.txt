@@ -1,0 +1,12 @@
+odd_num = even_num = 0;
+i = 0;
+while i <= 10 do
+if i % 2 == 0 then
+even_num = even_num + 1;
+else
+odd_num = odd_num + 1;
+end
+i = i + 1;
+end
+odd_num;
+even_num;

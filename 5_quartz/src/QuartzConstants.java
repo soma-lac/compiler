@@ -21,13 +21,15 @@ public interface QuartzConstants {
   /** RegularExpression Id. */
   int END = 8;
   /** RegularExpression Id. */
-  int PUTS = 9;
+  int DEF = 9;
   /** RegularExpression Id. */
-  int INTEGER = 10;
+  int PUTS = 10;
   /** RegularExpression Id. */
-  int STRING = 11;
+  int INTEGER = 11;
   /** RegularExpression Id. */
-  int IDENTIFIER = 12;
+  int STRING = 12;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 13;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -43,10 +45,14 @@ public interface QuartzConstants {
     "\"while\"",
     "\"do\"",
     "\"end\"",
+    "\"def\"",
     "\"puts\"",
     "<INTEGER>",
     "<STRING>",
     "<IDENTIFIER>",
+    "\"(\"",
+    "\",\"",
+    "\")\"",
     "\";\"",
     "\"=\"",
     "\"||\"",
@@ -62,8 +68,6 @@ public interface QuartzConstants {
     "\"*\"",
     "\"/\"",
     "\"%\"",
-    "\"(\"",
-    "\")\"",
   };
 
 }

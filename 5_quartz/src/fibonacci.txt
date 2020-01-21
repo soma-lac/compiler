@@ -1,0 +1,13 @@
+def fib(n)
+	if n < 2 then
+		n;
+	else
+		fib(n-1) + fib(n-2);
+	end
+end
+
+i = 0;
+while i <= 10 do
+	puts "fib(" + i + ") = " + fib(i);
+	i = i + 1;
+end

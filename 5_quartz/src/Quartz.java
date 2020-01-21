@@ -50,12 +50,13 @@ public class Quartz implements QuartzConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case IF:
       case WHILE:
+      case DEF:
       case PUTS:
       case INTEGER:
       case STRING:
       case IDENTIFIER:
-      case 23:
-      case 24:
+      case 14:
+      case 27:
       case 28:
         ;
         break;
@@ -78,11 +79,14 @@ public class Quartz implements QuartzConstants {
     case WHILE:
       x = whileStmt();
       break;
+    case DEF:
+      x = defStmt();
+      break;
     case INTEGER:
     case STRING:
     case IDENTIFIER:
-    case 23:
-    case 24:
+    case 14:
+    case 27:
     case 28:
       x = simpleStmt();
       break;
@@ -134,6 +138,51 @@ public class Quartz implements QuartzConstants {
     throw new Error("Missing return statement in function");
   }
 
+  final public Node defStmt() throws ParseException {
+        Node body;
+        Token t;
+        List<String> ps;
+    jj_consume_token(DEF);
+    t = jj_consume_token(IDENTIFIER);
+    ps = paramList();
+    body = block();
+    jj_consume_token(END);
+         {if (true) return new DefNode(t.beginLine, t.image, ps, body);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public List<String> paramList() throws ParseException {
+        Token t;
+        List<String> ps = new ArrayList<String>();
+    jj_consume_token(14);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case IDENTIFIER:
+      t = jj_consume_token(IDENTIFIER);
+                                ps.add(t.image);
+      label_2:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 15:
+          ;
+          break;
+        default:
+          jj_la1[3] = jj_gen;
+          break label_2;
+        }
+        jj_consume_token(15);
+        t = jj_consume_token(IDENTIFIER);
+                                       ps.add(t.image);
+      }
+      break;
+    default:
+      jj_la1[4] = jj_gen;
+      ;
+    }
+    jj_consume_token(16);
+         {if (true) return ps;}
+    throw new Error("Missing return statement in function");
+  }
+
   final public Node putsStmt() throws ParseException {
   Node n;
   Token t;
@@ -146,23 +195,24 @@ public class Quartz implements QuartzConstants {
   final public Node block() throws ParseException {
  Node x;
  List<Node> nodes = new ArrayList< Node >();
-    label_2:
+    label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case IF:
       case WHILE:
+      case DEF:
       case PUTS:
       case INTEGER:
       case STRING:
       case IDENTIFIER:
-      case 23:
-      case 24:
+      case 14:
+      case 27:
       case 28:
         ;
         break;
       default:
-        jj_la1[3] = jj_gen;
-        break label_2;
+        jj_la1[5] = jj_gen;
+        break label_3;
       }
       x = stmt();
                  nodes.add(x);
@@ -174,7 +224,7 @@ public class Quartz implements QuartzConstants {
   final public Node simpleStmt() throws ParseException {
   Node x;
     x = expr();
-    jj_consume_token(13);
+    jj_consume_token(17);
                          {if (true) return x;}
     throw new Error("Missing return statement in function");
   }
@@ -185,7 +235,7 @@ public class Quartz implements QuartzConstants {
   Node x;
     if (jj_2_1(2)) {
       n = name();
-      t = jj_consume_token(14);
+      t = jj_consume_token(18);
       x = expr();
      {if (true) return new AssignNode(t.beginLine, n, x);}
     } else {
@@ -193,14 +243,14 @@ public class Quartz implements QuartzConstants {
       case INTEGER:
       case STRING:
       case IDENTIFIER:
-      case 23:
-      case 24:
+      case 14:
+      case 27:
       case 28:
         x = orExpr();
                          {if (true) return x;}
         break;
       default:
-        jj_la1[4] = jj_gen;
+        jj_la1[6] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -212,17 +262,17 @@ public class Quartz implements QuartzConstants {
   Node x,y;
   Token t;
     x = andExpr();
-    label_3:
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 15:
+      case 19:
         ;
         break;
       default:
-        jj_la1[5] = jj_gen;
-        break label_3;
+        jj_la1[7] = jj_gen;
+        break label_4;
       }
-      t = jj_consume_token(15);
+      t = jj_consume_token(19);
       y = andExpr();
                                         x = new BinExprNode(t.beginLine,x,t.image,y);
     }
@@ -234,17 +284,17 @@ public class Quartz implements QuartzConstants {
   Node x,y;
   Token t;
     x = compExpr();
-    label_4:
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 16:
+      case 20:
         ;
         break;
       default:
-        jj_la1[6] = jj_gen;
-        break label_4;
+        jj_la1[8] = jj_gen;
+        break label_5;
       }
-      t = jj_consume_token(16);
+      t = jj_consume_token(20);
       y = compExpr();
                  x = new BinExprNode(t.beginLine,x,t.image,y);
     }
@@ -257,33 +307,33 @@ public class Quartz implements QuartzConstants {
   Token t;
     x = numExpr();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 17:
-    case 18:
-    case 19:
-    case 20:
     case 21:
     case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 17:
-        t = jj_consume_token(17);
-        break;
-      case 18:
-        t = jj_consume_token(18);
-        break;
-      case 19:
-        t = jj_consume_token(19);
-        break;
-      case 20:
-        t = jj_consume_token(20);
-        break;
       case 21:
         t = jj_consume_token(21);
         break;
       case 22:
         t = jj_consume_token(22);
         break;
+      case 23:
+        t = jj_consume_token(23);
+        break;
+      case 24:
+        t = jj_consume_token(24);
+        break;
+      case 25:
+        t = jj_consume_token(25);
+        break;
+      case 26:
+        t = jj_consume_token(26);
+        break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[9] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -291,7 +341,7 @@ public class Quartz implements QuartzConstants {
            x = new BinExprNode(t.beginLine, x, t.image, y);
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[10] = jj_gen;
       ;
     }
     {if (true) return x;}
@@ -302,28 +352,28 @@ public class Quartz implements QuartzConstants {
         Token t;
         Node x,y;
     x = term();
-    label_5:
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 23:
-      case 24:
+      case 27:
+      case 28:
         ;
         break;
       default:
-        jj_la1[9] = jj_gen;
-        break label_5;
+        jj_la1[11] = jj_gen;
+        break label_6;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 23:
-        t = jj_consume_token(23);
+      case 27:
+        t = jj_consume_token(27);
         y = term();
         break;
-      case 24:
-        t = jj_consume_token(24);
+      case 28:
+        t = jj_consume_token(28);
         y = term();
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[12] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -337,33 +387,33 @@ public class Quartz implements QuartzConstants {
   Node x, y;
   Token t;
     x = factor();
-    label_6:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 25:
-      case 26:
-      case 27:
+      case 29:
+      case 30:
+      case 31:
         ;
         break;
       default:
-        jj_la1[11] = jj_gen;
-        break label_6;
+        jj_la1[13] = jj_gen;
+        break label_7;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 25:
-        t = jj_consume_token(25);
+      case 29:
+        t = jj_consume_token(29);
         y = factor();
         break;
-      case 26:
-        t = jj_consume_token(26);
+      case 30:
+        t = jj_consume_token(30);
         y = factor();
         break;
-      case 27:
-        t = jj_consume_token(27);
+      case 31:
+        t = jj_consume_token(31);
         y = factor();
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[14] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -383,24 +433,24 @@ public class Quartz implements QuartzConstants {
       x = element();
                         {if (true) return x;}
       break;
-    case 28:
-      t = jj_consume_token(28);
+    case 14:
+      t = jj_consume_token(14);
       x = expr();
-      jj_consume_token(29);
+      jj_consume_token(16);
                                  {if (true) return x;}
       break;
-    case 24:
-      t = jj_consume_token(24);
+    case 28:
+      t = jj_consume_token(28);
       x = factor();
                                {if (true) return new NegExprNode(t.beginLine, x, t.image);}
       break;
-    case 23:
-      t = jj_consume_token(23);
+    case 27:
+      t = jj_consume_token(27);
       x = factor();
                                {if (true) return new PosExprNode(t.beginLine, x, t.image);}
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -412,21 +462,71 @@ public class Quartz implements QuartzConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER:
       n = number();
-                       {if (true) return n;}
       break;
     case IDENTIFIER:
       n = name();
-                     {if (true) return n;}
       break;
     case STRING:
       n = string();
-                       {if (true) return n;}
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[16] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 14:
+      n = postfix(n);
+      break;
+    default:
+      jj_la1[17] = jj_gen;
+      ;
+    }
+         {if (true) return n;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public Node postfix(Node n) throws ParseException {
+        List<Node> as;
+    as = argList();
+         {if (true) return new CallNode(n.line(),n,as);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public List<Node> argList() throws ParseException {
+Node n;
+List<Node> as = new ArrayList<Node>();
+    jj_consume_token(14);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case INTEGER:
+    case STRING:
+    case IDENTIFIER:
+    case 14:
+    case 27:
+    case 28:
+      n = expr();
+                        as.add(n);
+      label_8:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 15:
+          ;
+          break;
+        default:
+          jj_la1[18] = jj_gen;
+          break label_8;
+        }
+        jj_consume_token(15);
+        n = expr();
+                                                     as.add(n);
+      }
+      break;
+    default:
+      jj_la1[19] = jj_gen;
+      ;
+    }
+    jj_consume_token(16);
+         {if (true) return as;}
     throw new Error("Missing return statement in function");
   }
 
@@ -458,14 +558,14 @@ public class Quartz implements QuartzConstants {
     finally { jj_save(0, xla); }
   }
 
-  private boolean jj_3R_7() {
-    if (jj_scan_token(IDENTIFIER)) return true;
+  private boolean jj_3_1() {
+    if (jj_3R_9()) return true;
+    if (jj_scan_token(18)) return true;
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_3R_7()) return true;
-    if (jj_scan_token(14)) return true;
+  private boolean jj_3R_9() {
+    if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
@@ -480,13 +580,13 @@ public class Quartz implements QuartzConstants {
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   private int jj_gen;
-  final private int[] jj_la1 = new int[15];
+  final private int[] jj_la1 = new int[20];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x11801e48,0x11801e48,0x20,0x11801e48,0x11801c00,0x8000,0x10000,0x7e0000,0x7e0000,0x1800000,0x1800000,0xe000000,0xe000000,0x11801c00,0x1c00,};
+      jj_la1_0 = new int[] {0x18007e48,0x18007e48,0x20,0x8000,0x2000,0x18007e48,0x18007800,0x80000,0x100000,0x7e00000,0x7e00000,0x18000000,0x18000000,0xe0000000,0xe0000000,0x18007800,0x3800,0x4000,0x8000,0x18007800,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[1];
   private boolean jj_rescan = false;
@@ -503,7 +603,7 @@ public class Quartz implements QuartzConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -518,7 +618,7 @@ public class Quartz implements QuartzConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -529,7 +629,7 @@ public class Quartz implements QuartzConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -540,7 +640,7 @@ public class Quartz implements QuartzConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -550,7 +650,7 @@ public class Quartz implements QuartzConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -560,7 +660,7 @@ public class Quartz implements QuartzConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 15; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -672,12 +772,12 @@ public class Quartz implements QuartzConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[30];
+    boolean[] la1tokens = new boolean[32];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 20; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -686,7 +786,7 @@ public class Quartz implements QuartzConstants {
         }
       }
     }
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 32; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
