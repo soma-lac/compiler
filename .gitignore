@@ -1,4 +1,3 @@
-/bin/
 *.class
 Token.java
 TokenMgrError.java

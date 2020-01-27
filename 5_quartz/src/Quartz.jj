@@ -60,17 +60,18 @@ SKIP : {
   }
 
 TOKEN : {
-	< IF	:"if" >
-|	< THEN	:"then" >
-| 	< ELSE	:"else" >
-|	< WHILE:"while" >
-| 	< DO	:"do" > 
-| 	< END	:"end" >
-|	< DEF	:"def">
-| 	< PUTS :"puts" >
-|  	< INTEGER: (["0"-"9"])+ >
-| 	< STRING: "\"" (~["\""])* "\"" >  
-| < IDENTIFIER:["a"-"z","A"-"Z","_"] (["a"-"z","A"-"Z","_","0"-"9"])*		>
+	  < IF	       :"if" >
+|	  < THEN	     :"then" >
+| 	< ELSE	     :"else" >
+|	  < WHILE      :"while" >
+| 	< DO	       :"do" > 
+| 	< END	       :"end" >
+|	  < DEF	       :"def">
+|   < FUN        :"fun">
+| 	< PUTS       :"puts" >
+|  	< INTEGER    : (["0"-"9"])+ >
+| 	< STRING     : "\"" (~["\""])* "\"" >  
+|   < IDENTIFIER :["a"-"z","A"-"Z","_"] (["a"-"z","A"-"Z","_","0"-"9"])*		>
 }
 
 void eval() :
@@ -78,7 +79,8 @@ void eval() :
    Node root;
 }
 {
-  (    root = stmt()
+  (
+    root = stmt()
     	{ root.eval(env); }
   )*
   <EOF>
@@ -89,7 +91,8 @@ Node stmt():
   Node x;
 }
 {
-  (    
+  (
+    
   x = ifStmt()
 | x = whileStmt()
 | x = defStmt()
@@ -172,7 +175,8 @@ Node block():
  List<Node> nodes = new ArrayList< Node >();
 }
 {
-  (    x = stmt() { nodes.add(x); }
+  (
+    x = stmt() { nodes.add(x); }
   )*
   {
     return new BlockNode(nodes);
@@ -218,7 +222,8 @@ Node andExpr():
   Node x,y;
   Token t;
 }
-{    x = compExpr()
+{
+    x = compExpr()
     (t = "&&" y = compExpr()
    		{x = new BinExprNode(t.beginLine,x,t.image,y);}
    	)*
@@ -262,14 +267,16 @@ Node term()	:
 }
 {
   	x = factor()
-  	(  	  (t = "*" y = factor() | t = "/" y = factor()  | t = "%" y = factor())
+  	(
+  	  (t = "*" y = factor() | t = "/" y = factor()  | t = "%" y = factor())
   	  { x = new BinExprNode(t.beginLine,x,t.image,y); }
     )*
   { return x; }
 }
 
 Node factor()	:
-{  Node x;
+{
+  Node x;
   Token t;
 }
 {
@@ -286,9 +293,10 @@ Node element():
 {
 	(n = number() |
 	 n = name() |
-	 n = string()
+	 n = string() |
+   n = fun()
 	)
-	[n = postfix(n)]
+	(n = postfix(n))*
 	{return n;}
 }
 
@@ -327,6 +335,17 @@ NameNode name():
 {
 	t = <IDENTIFIER>
 		{ return new NameNode(t.beginLine,t.image); }
+}
+
+Node fun():
+{
+  Token t;
+  List<String> ps;
+  Node body;
+}
+{
+  t = <FUN> ps = paramList() "{" body = block() "}"
+  {return new FunNode(t.beginLine,ps,body);}
 }
 
 StringNode string():
