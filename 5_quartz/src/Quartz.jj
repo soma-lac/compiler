@@ -294,47 +294,29 @@ Node element():
 	(n = number() |
 	 n = name() |
 	 n = string() |
-   n = fun()
+   n = fun()  |
+   n = array()
 	)
 	(n = postfix(n))*
 	{return n;}
 }
 
-Node postfix(Node n):
+NumberNode number() :
 {
-	List<Node> as;
+  Token t; 
 }
-{
-	as = argList()
-	{return new CallNode(n.line(),n,as);}
-}
-
-List<Node> argList():
-{
-Node n;
-List<Node> as = new ArrayList<Node>();
-}
-{
-	"(" [n = expr(){as.add(n);} ("," n = expr() {as.add(n); } )* ] ")"
-	{return as;}
-}
-
-NumberNode number()	:
-{
- 	Token t; 
-}
-	{
-	t = <INTEGER>
-		{return new NumberNode(t.beginLine,Integer.parseInt(t.image));}
-  	 }
+  {
+  t = <INTEGER>
+    {return new NumberNode(t.beginLine,Integer.parseInt(t.image));}
+     }
 
 NameNode name():
 {
-  	Token t;
+    Token t;
 }
 {
-	t = <IDENTIFIER>
-		{ return new NameNode(t.beginLine,t.image); }
+  t = <IDENTIFIER>
+    { return new NameNode(t.beginLine,t.image); }
 }
 
 Node fun():
@@ -348,11 +330,51 @@ Node fun():
   {return new FunNode(t.beginLine,ps,body);}
 }
 
+Node array():
+{
+  Token t;
+  Node x;
+}
+{
+  t = "[" [x = expr() ( ","x = expr())* ] "]" 
+
+}
+
 StringNode string():
 {
-	Token t;
+  Token t;
 }
 {
-	t = < STRING >
-		{return new StringNode(t.beginLine,t.image); }
+  t = < STRING >
+    {return new StringNode(t.beginLine,t.image); }
 }
+
+Node postfix(Node n):
+{
+	List<Node> as;
+}
+{
+	as = argList()|arrayRef()
+	{return new CallNode(n.line(),n,as);}
+}
+
+List<Node> argList():
+{
+Node n;
+List<Node> as = new ArrayList<Node>();
+}
+{
+	"(" [n = expr(){as.add(n);} ("," n = expr() {as.add(n); } )* ] ")"
+	{return as;}
+}
+
+List<Node> arrayRef():
+{
+  Node n;
+  List<Node> as;
+}
+{
+  "[" n = expr(){as.add(n);}"]"
+  {return as;}
+}
+
